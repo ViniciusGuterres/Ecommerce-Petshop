@@ -1,10 +1,13 @@
 import { useState } from "react";
 
+// Components
+import Input from "../components/Input.jsx";
+import UploadInput from '../components/UploadInput.jsx';
 
 function CustomersCrud() {
     // States
-    const [customerInfoObj, setCustomerInfoObj] = useState({});
-    const [viewMode, setViewMode] = useState('create') // options: edit, view, create
+    const [customerPersonalDataObj, setCustomerPersonalDataObj] = useState({});
+    const [crudMode, setCrudMode] = useState('create') // options: edit, view, create
     const [currentTab, setCurrentTab] = useState('personalData') // options: personalData, loginData, creditCardData
 
     // Globals vars
@@ -19,7 +22,13 @@ function CustomersCrud() {
     const buildCurrentTabForm = () => {
         switch (currentTab) {
             case 'personalData': {
-                return PersonalDataForm();
+                return (
+                    < PersonalDataForm
+                        name={customerPersonalDataObj.name}
+                        cpf={customerPersonalDataObj.cpf}
+                        telephone={customerPersonalDataObj.telephone}
+                    />
+                );
             }
             case 'loginData': {
                 return LoginDataForm();
@@ -45,7 +54,6 @@ function CustomersCrud() {
         <div>
             {/* Tabs selector */}
             <div className="max-w-2xl mx-auto">
-
                 <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
                     <ul
                         className="flex flex-wrap justify-center -mb-px"
@@ -102,15 +110,88 @@ function CustomersCrud() {
                 </div>
             </div>
 
+            {/* Forms content */}
             {buildCurrentTabForm()}
         </div>
     );
 }
 
-function PersonalDataForm() {
+function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state }) {
     return (
         <form>
-            Personal data form
+            <div className="max-w-2xl mx-auto">
+                <div className="flex gap-2">
+                    {/* Name */}
+                    <Input
+                        value={name}
+                        type={'text'}
+                        onChange={() => console.log('test')}
+                        placeholder='Nome'
+                        cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                    />
+
+                    {/*  LastName */}
+                    <Input
+                        value={lastName}
+                        type={'text'}
+                        onChange={() => console.log('test')}
+                        placeholder='Sobrenome'
+                        cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                    />
+                </div>
+
+                <div className="flex gap-2">
+                    {/* CPF */}
+                    <Input
+                        value={cpf}
+                        type={'text'}
+                        onChange={() => console.log('test')}
+                        placeholder='CPF'
+                        cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                    />
+
+                    {/* Telephone */}
+                    <Input
+                        value={telephone}
+                        type={'number'}
+                        onChange={() => console.log('test')}
+                        placeholder='Telefone'
+                        cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                    />
+                </div>
+
+                {/* Address */}
+                <Input
+                    value={address}
+                    type={'text'}
+                    onChange={() => console.log('test')}
+                    placeholder='Endereço'
+                    cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                />
+
+                <div className="flex gap-2">
+                    {/* City */}
+                    <Input
+                        value={city}
+                        type={'text'}
+                        onChange={() => console.log('test')}
+                        placeholder='Cidade'
+                        cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                    />
+
+                    {/* State */}
+                    <Input
+                        value={state}
+                        type={'text'}
+                        onChange={() => console.log('test')}
+                        placeholder='Estado'
+                        cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                    />
+                </div>
+
+                {/* Profile img */}
+                <UploadInput />
+            </div>
         </form>
     )
 }
