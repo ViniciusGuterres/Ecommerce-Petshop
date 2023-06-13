@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // images imports
-import userPlaceholder from '../../images/userDefaultPlaceholder.jpg';
+import userPlaceholder from '../images/userDefaultPlaceholder.jpg';
 
 /**
  * @function UploadInput - Input to upload img, returns files in Base64
