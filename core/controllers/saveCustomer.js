@@ -20,7 +20,6 @@ async function saveCustomer(req, res, next) {
     }
 
     const {
-        code,
         name,
         lastName,
         cpf,
@@ -30,14 +29,6 @@ async function saveCustomer(req, res, next) {
         state,
         profileImage
     } = req.body;
-
-    if (!code || (typeof code != 'number')) {
-        console.log("controllers/saveCustomer - missing code or wrong format");
-        objReturn.error = "missing code";
-        objReturn.resStatus = 400;
-        controllerReturn(objReturn, res);
-        return;
-    }
 
     if (!name || (typeof name != 'string')) {
         console.log("controllers/saveCustomer - missing name or wrong format");
