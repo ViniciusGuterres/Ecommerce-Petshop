@@ -3,7 +3,7 @@ const customerModel = require('../models/customer.js');
 
 async function saveCustomer(req, res, next) {
     res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 
     // Globals
     const objReturn = {
