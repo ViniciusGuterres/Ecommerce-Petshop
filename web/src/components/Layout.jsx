@@ -3,7 +3,7 @@ import '../index.css';
 // Components
 import Header from './Header.jsx';
 
-import CustomersCrud from '../views/customersCrud/index.js';
+import CustomersCrud from '../views/CustomersCrud.js';
 
 function Layout() {
     return (

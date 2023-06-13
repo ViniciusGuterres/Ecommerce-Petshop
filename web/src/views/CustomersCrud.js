@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 // Components
-import Input from "../../components/Input.jsx";
-import UploadInput from '../../components/UploadInput.jsx';
+import Input from "../components/Input.jsx";
+import UploadInput from '../components/UploadInput.jsx';
 
 function CustomersCrud() {
     // States
