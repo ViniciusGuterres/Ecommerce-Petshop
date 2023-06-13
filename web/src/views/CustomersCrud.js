@@ -2,19 +2,56 @@ import { useState } from "react";
 
 // Components
 import Input from "../components/Input.jsx";
+import Button from "../components/Button.jsx";
 import UploadInput from '../components/UploadInput.jsx';
 
-function CustomersCrud() {
-    // States
-    const [customerPersonalDataObj, setCustomerPersonalDataObj] = useState({});
-    const [crudMode, setCrudMode] = useState('create') // options: edit, view, create
-    const [currentTab, setCurrentTab] = useState('personalData') // options: personalData, loginData, creditCardData
+import settings from "../settings.js";
 
+// Globals const
+const BACKEND_SERVER_URL = settings.backendEndUrl;
+
+function CustomersCrud() {
     // Globals vars
     const defaultTabClass = 'inline-block text-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-4 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300';
     const selectedTabClass = 'text-primary-700 border-primary-700 inline-block rounded-t-lg py-4 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300';
 
+    const customerPersonalDataDefaultFieldsObj = {
+        name: '',
+        lastName: '',
+        cpf: '',
+        telephone: '',
+        address: '',
+        city: '',
+        state: '',
+    };
+
+    // States
+    const [customerPersonalDataObj, setCustomerPersonalDataObj] = useState(customerPersonalDataDefaultFieldsObj);
+    const [crudMode, setCrudMode] = useState('create') // options: edit, view, create
+    const [currentTab, setCurrentTab] = useState('personalData') // options: personalData, loginData, creditCardData
+
+
     // Functions
+    /**
+     * @function handleChangeCustomerPersonalDataInput - Will get the input new value and setting the new value at state current obj key
+     * @param {string} newValue - The personal data input new value
+     * @param string} inputKey - The change personal data input key (state, name, lastName)
+     */
+    const handleChangeCustomerPersonalDataInput = (newValue, inputKey) => {
+        let personalDataNewValue = newValue;
+
+        // Convert to number CPF and telephone inputs
+        if (inputKey == 'cpf' || inputKey == 'telephone') {
+            personalDataNewValue = +newValue;
+        }
+
+        // Getting the state copy and setting the changed key attribute
+        const customerPersonalDataObjCopy = { ...customerPersonalDataObj };
+        customerPersonalDataObjCopy[inputKey] = personalDataNewValue;
+
+        setCustomerPersonalDataObj(customerPersonalDataObjCopy);
+    }
+
     /**
      * @function buildCurrentTabForm - Will render the selected tab PersonalDataForm, LoginDataForm or CreditCardData form 
      * @returns {Element} - Wil return a react element
@@ -27,6 +64,10 @@ function CustomersCrud() {
                         name={customerPersonalDataObj.name}
                         cpf={customerPersonalDataObj.cpf}
                         telephone={customerPersonalDataObj.telephone}
+                        address={customerPersonalDataObj.address}
+                        city={customerPersonalDataObj.city}
+                        state={customerPersonalDataObj.state}
+                        handleChangeInput={handleChangeCustomerPersonalDataInput}
                     />
                 );
             }
@@ -48,6 +89,25 @@ function CustomersCrud() {
      */
     const getTabButtonClass = (tabName) => {
         return tabName === currentTab ? selectedTabClass : defaultTabClass;
+    }
+
+    const handleClickSaveCustomer = () => {
+
+        const jsonData = JSON.stringify(customerPersonalDataObj);
+
+        // Calling saving customer controller
+        const postOptions = {
+            method: 'POST',
+            body: jsonData,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        fetch(`${BACKEND_SERVER_URL}/saveCustomer`, postOptions)
+            .then(response => response.text())
+            .then(text => console.log('text:: ', text))
+            .catch(err => console.log('Error::: ', err.message));
     }
 
     return (
@@ -112,11 +172,18 @@ function CustomersCrud() {
 
             {/* Forms content */}
             {buildCurrentTabForm()}
+
+            {/* Save Button */}
+            <Button
+                onClickFunction={handleClickSaveCustomer}
+                placeholder='Salvar'
+                cssClass='text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800'
+            />
         </div>
     );
 }
 
-function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state }) {
+function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state, handleChangeInput }) {
     return (
         <form>
             <div className="max-w-2xl mx-auto">
@@ -125,8 +192,9 @@ function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state
                     <Input
                         value={name}
                         type={'text'}
-                        onChange={() => console.log('test')}
+                        onChange={handleChangeInput}
                         placeholder='Nome'
+                        dataKey='name'
                         cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                     />
 
@@ -134,8 +202,9 @@ function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state
                     <Input
                         value={lastName}
                         type={'text'}
-                        onChange={() => console.log('test')}
+                        onChange={handleChangeInput}
                         placeholder='Sobrenome'
+                        dataKey='lastName'
                         cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                     />
                 </div>
@@ -144,9 +213,10 @@ function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state
                     {/* CPF */}
                     <Input
                         value={cpf}
-                        type={'text'}
-                        onChange={() => console.log('test')}
+                        type={'number'}
+                        onChange={handleChangeInput}
                         placeholder='CPF'
+                        dataKey='cpf'
                         cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                     />
 
@@ -154,8 +224,9 @@ function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state
                     <Input
                         value={telephone}
                         type={'number'}
-                        onChange={() => console.log('test')}
+                        onChange={handleChangeInput}
                         placeholder='Telefone'
+                        dataKey='telephone'
                         cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                     />
                 </div>
@@ -164,8 +235,9 @@ function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state
                 <Input
                     value={address}
                     type={'text'}
-                    onChange={() => console.log('test')}
+                    onChange={handleChangeInput}
                     placeholder='Endereço'
+                    dataKey='address'
                     cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                 />
 
@@ -174,8 +246,9 @@ function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state
                     <Input
                         value={city}
                         type={'text'}
-                        onChange={() => console.log('test')}
+                        onChange={handleChangeInput}
                         placeholder='Cidade'
+                        dataKey='city'
                         cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                     />
 
@@ -183,14 +256,17 @@ function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state
                     <Input
                         value={state}
                         type={'text'}
-                        onChange={() => console.log('test')}
+                        onChange={handleChangeInput}
                         placeholder='Estado'
+                        dataKey='state'
                         cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                     />
                 </div>
 
                 {/* Profile img */}
-                <UploadInput />
+                <UploadInput
+                    dataKey='profileImg'
+                />
             </div>
         </form>
     )
