@@ -25,8 +25,22 @@ function CustomersCrud() {
         state: '',
     };
 
+    const customerLoginDataDefaultFieldsObj = {
+        email: '',
+        password: ''
+    };
+
+    const customerCreditCardDataDefaultFieldsObj = {
+        number: '',
+        cvc: '',
+        nameOnCard: '',
+        expirationDate: '',
+    };
+
     // States
     const [customerPersonalDataObj, setCustomerPersonalDataObj] = useState(customerPersonalDataDefaultFieldsObj);
+    const [customerLoginDataObj, setCustomerLoginDataObj] = useState(customerLoginDataDefaultFieldsObj);
+    const [customerCreditCardDataObj, setCustomerCreditCardDataObj] = useState(customerCreditCardDataDefaultFieldsObj);
     const [crudMode, setCrudMode] = useState('create') // options: edit, view, create
     const [currentTab, setCurrentTab] = useState('personalData') // options: personalData, loginData, creditCardData
 
@@ -35,13 +49,13 @@ function CustomersCrud() {
     /**
      * @function handleChangeCustomerPersonalDataInput - Will get the input new value and setting the new value at state current obj key
      * @param {string} newValue - The personal data input new value
-     * @param string} inputKey - The change personal data input key (state, name, lastName)
+     * @param string} inputKey - The change personal data input key e.g (state, name, lastName...)
      */
     const handleChangeCustomerPersonalDataInput = (newValue, inputKey) => {
         let personalDataNewValue = newValue;
 
         // Convert to number CPF and telephone inputs
-        if (inputKey == 'cpf' || inputKey == 'telephone') {
+        if (inputKey === 'cpf' || inputKey === 'telephone') {
             personalDataNewValue = +newValue;
         }
 
@@ -53,6 +67,30 @@ function CustomersCrud() {
     }
 
     /**
+     * @function handleChangeCustomerLoginDataInput - Will get the input new value and setting the new value at state current obj key
+     * @param {string} newValue - The login data input new value
+     * @param string} inputKey - The change login data input key e.g (email, password)
+     */
+    const handleChangeCustomerLoginDataInput = (newValue, inputKey) => {
+        const customerLoginDataObjCopy = { ...customerLoginDataObj };
+        customerLoginDataObjCopy[inputKey] = newValue;
+
+        setCustomerLoginDataObj(customerLoginDataObjCopy);
+    }
+
+    /**
+     * @function handleChangeCustomerCreditCardDataInput - Will get the input new value and setting the new value at state current obj key
+     * @param {string} newValue - The credit card data input new value
+     * @param {string} inputKey - The change credit card data input key e.g (email, password)
+     */
+    const handleChangeCustomerCreditCardDataInput = (newValue, inputKey) => {
+        const customerCreditCardDataObjCopy = { ...customerLoginDataObj };
+        customerCreditCardDataObjCopy[inputKey] = newValue;
+
+        setCustomerCreditCardDataObj(customerCreditCardDataObjCopy);
+    }
+
+    /**
      * @function buildCurrentTabForm - Will render the selected tab PersonalDataForm, LoginDataForm or CreditCardData form 
      * @returns {Element} - Wil return a react element
      */
@@ -60,7 +98,7 @@ function CustomersCrud() {
         switch (currentTab) {
             case 'personalData': {
                 return (
-                    < PersonalDataForm
+                    <PersonalDataForm
                         name={customerPersonalDataObj.name}
                         cpf={customerPersonalDataObj.cpf}
                         telephone={customerPersonalDataObj.telephone}
@@ -72,10 +110,24 @@ function CustomersCrud() {
                 );
             }
             case 'loginData': {
-                return LoginDataForm();
+                return (
+                    <LoginDataForm
+                        email={customerLoginDataObj.email}
+                        password={customerLoginDataObj.password}
+                        handleChangeInput={handleChangeCustomerLoginDataInput}
+                    />
+                );
             }
             case 'creditCardData': {
-                return CreditCardDataForm();
+                return (
+                    <CreditCardDataForm
+                        nameOnCard={customerCreditCardDataObj.nameOnCard}
+                        cvc={customerCreditCardDataObj.cvc}
+                        expirationDate={customerCreditCardDataObj.expirationDate}
+                        number={customerCreditCardDataObj.number}
+                        handleChangeInput={handleChangeCustomerCreditCardDataInput}
+                    />
+                );
             }
             default: {
                 return PersonalDataForm();
@@ -269,23 +321,81 @@ function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state
                 />
             </div>
         </form>
-    )
+    );
 }
 
-function LoginDataForm() {
+function LoginDataForm({ email, password, handleChangeInput }) {
     return (
         <form>
-            Login data form
+            <div className="max-w-2xl mx-auto">
+                <Input
+                    value={email}
+                    type={'email'}
+                    onChange={handleChangeInput}
+                    placeholder='Email'
+                    dataKey='email'
+                    cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                />
+
+                <Input
+                    value={password}
+                    type={'password'}
+                    onChange={handleChangeInput}
+                    placeholder='Senha'
+                    dataKey='password'
+                    cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                />
+            </div>
         </form>
-    )
+    );
 }
 
-function CreditCardDataForm() {
+function CreditCardDataForm({ nameOnCard, number, expirationDate, cvc, handleChangeInput }) {
     return (
         <form>
-            Credit data form
+            <div className="max-w-2xl mx-auto">
+                <Input
+                    value={nameOnCard}
+                    type={'text'}
+                    onChange={handleChangeInput}
+                    placeholder='Nome no Cartão'
+                    dataKey='nameOnCard'
+                    cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                />
+
+                <Input
+                    value={number}
+                    type={'number'}
+                    onChange={handleChangeInput}
+                    placeholder='Número'
+                    dataKey='number'
+                    cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                />
+
+                <div className="flex gap-2">
+                    {/* Expiration date */}
+                    <Input
+                        value={expirationDate}
+                        type={'text'}
+                        onChange={handleChangeInput}
+                        placeholder='Data da Validade'
+                        dataKey='expirationDate'
+                        cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                    />
+
+                    {/* CVC */}
+                    <Input
+                        value={cvc}
+                        type={'number'}
+                        onChange={handleChangeInput}
+                        placeholder='CVC'
+                        dataKey='cvc'
+                        cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                    />
+                </div>
+            </div>
         </form>
-    )
+    );
 }
 
 export default CustomersCrud;
