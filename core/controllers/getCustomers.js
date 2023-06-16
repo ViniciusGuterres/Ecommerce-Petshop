@@ -80,7 +80,7 @@ async function getCustomers(req, res, next) {
     async function getCustomersByFields() {
         try {
             // Filter customer by fields using OR operator
-            const getCustomerResult = await customerModel.find({$or:[{name}, {lastName},{city}, {state}, {status}]});
+            const getCustomerResult = await customerModel.find({$or:[{name}, {lastName},{city}, {state}]});
 
             objReturn.data = getCustomerResult;
             objReturn.resStatus = 200;
