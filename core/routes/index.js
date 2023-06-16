@@ -1,7 +1,9 @@
 const customerRoutes = require('./CustomerRoutes.js');
-const CategoryRoutes = require('./CategoryRoutes.js');
+const categoryRoutes = require('./CategoryRoutes.js');
+const productRoutes = require('./ProductRoutes.js');
 
 module.exports = (app) => {
     customerRoutes(app);
-    CategoryRoutes(app);
+    categoryRoutes(app);
+    productRoutes(app);
 }
