@@ -47,7 +47,7 @@ async function updateProduct(req, res, next) {
         description,
     } = req.body;
 
-    if (!name && (typeof name != 'string')) {
+    if (name && (typeof name != 'string')) {
         console.log("controllers/updateProduct - missing name or wrong format");
         objReturn.error = "missing name or wrong format";
         objReturn.resStatus = 400;
@@ -55,7 +55,7 @@ async function updateProduct(req, res, next) {
         return;
     }
     
-    if (!description && (typeof description != 'string')) {
+    if (description && (typeof description != 'string')) {
         console.log("controllers/updateProduct - missing description or wrong format");
         objReturn.error = "missing description or wrong format";
         objReturn.resStatus = 400;
@@ -63,7 +63,7 @@ async function updateProduct(req, res, next) {
         return;
     }
 
-    if (!price && (typeof price != 'number')) {
+    if (price && (typeof price != 'number')) {
         console.log("controllers/updateProduct - missing price or wrong format");
         objReturn.error = "missing price or wrong format";
         objReturn.resStatus = 400;
@@ -71,7 +71,7 @@ async function updateProduct(req, res, next) {
         return;
     }
 
-    if (!categoryId && (typeof categoryId != 'number')) {
+    if (categoryId && (typeof categoryId != 'number')) {
         console.log("controllers/updateProduct - missing categoryId or wrong format");
         objReturn.error = "missing categoryId or wrong format";
         objReturn.resStatus = 400;
@@ -79,7 +79,7 @@ async function updateProduct(req, res, next) {
         return;
     }
     
-    if (!animal && (typeof animal != 'string')) {
+    if (animal && (typeof animal != 'string')) {
         console.log("controllers/updateProduct - missing animal or wrong format");
         objReturn.error = "missing animal or wrong format";
         objReturn.resStatus = 400;
@@ -87,7 +87,7 @@ async function updateProduct(req, res, next) {
         return;
     }
 
-    if (!comments && (typeof comments != 'object')) {
+    if (comments && (typeof comments != 'object')) {
         console.log("controllers/updateProduct - missing comments or wrong format");
         objReturn.error = "missing comments or wrong format";
         objReturn.resStatus = 400;
