@@ -54,14 +54,6 @@ async function updateProduct(req, res, next) {
         controllerReturn(objReturn, res);
         return;
     }
-
-    if (!image) {
-        console.log("controllers/updateProduct - missing image");
-        objReturn.error = "missing image or wrong format";
-        objReturn.resStatus = 400;
-        controllerReturn(objReturn, res);
-        return;
-    }
     
     if (!description && (typeof description != 'string')) {
         console.log("controllers/updateProduct - missing description or wrong format");
