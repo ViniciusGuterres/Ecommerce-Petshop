@@ -1,5 +1,6 @@
 // Requires model
 const productModel = require('../models/product.js');
+const categoryModel = require('../models/category.js');
 
 async function saveProduct(req, res, next) {
     res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
@@ -44,7 +45,7 @@ async function saveProduct(req, res, next) {
         controllerReturn(objReturn, res);
         return;
     }
-    
+
     if (!description || (typeof description != 'string')) {
         console.log("controllers/saveProduct - missing description or wrong format");
         objReturn.error = "missing description or wrong format";
@@ -68,7 +69,7 @@ async function saveProduct(req, res, next) {
         controllerReturn(objReturn, res);
         return;
     }
-    
+
     if (!animal || (typeof animal != 'string')) {
         console.log("controllers/saveProduct - missing animal or wrong format");
         objReturn.error = "missing animal or wrong format";
@@ -93,10 +94,21 @@ async function saveProduct(req, res, next) {
         const maxMongoProductID = await productModel.findOne({}).sort({ code: -1 });
         productObj.code = maxMongoProductID == null ? 1 : maxMongoProductID.code + 1;
 
-        const createProductResult = await productModel.create(productObj);
+        // Getting the category mongo _id
+        const mongoCategory = await categoryModel.findOne({ code: categoryId });
 
-        objReturn.data = createProductResult;
-        objReturn.resStatus = 201;
+        // If do not find the category id, return error, otherwise, continues save product workflow
+        if (!mongoCategory?._id) {
+            console.log(`controllers/saveProduct - the categoryId: ${categoryId} doesn't exists`);
+            objReturn.error = `the categoryId: ${categoryId} doesn't exists`;
+            objReturn.resStatus = 400;
+        } else {
+            productObj.category = mongoCategory._id;
+            const createProductResult = await productModel.create(productObj);
+
+            objReturn.data = createProductResult;
+            objReturn.resStatus = 201;
+        }
     } catch (err) {
         console.log("controllers/saveProduct - Error to create product mongo document - ERROR: ", err);
         objReturn.error = err;

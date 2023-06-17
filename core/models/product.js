@@ -21,8 +21,9 @@ const productSchema = new mongoose.Schema({
         type: Number,
         require: true,
     },
-    categoryId: {
-        type: Number,
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        refs: 'categories',
         require: true,
     },
     animal: {
