@@ -64,6 +64,10 @@ async function getProducts(req, res, next) {
      */
     async function getAllProducts() {
         try {
+            // Req return objects
+            const productsByCategoryObj = {};
+            const categoriesDictionary = {};
+
             // Getting the products, aggregating with category schema
             const getAllProductsResult = await productModel.aggregate([
                 {
@@ -76,7 +80,26 @@ async function getProducts(req, res, next) {
                 }
             ]);
 
-            objReturn.data = getAllProductsResult;
+            // Will loop through all products to separate each by category
+            getAllProductsResult?.forEach(product => {
+                const productCategory = product?.category_obj?.[0] || {};
+
+                if (Object.keys(productCategory)?.length) {
+                    const { code: categoryCode, name: categoryName } = productCategory;
+
+                    // If the category obj isn't initialized yet, do it, otherwise, just push the product in the current category
+                    if (!productsByCategoryObj[categoryCode]) {
+                        productsByCategoryObj[categoryCode] = [product];
+                        
+                        // Adding the category to the dictionary obj
+                        categoriesDictionary[categoryCode] = categoryName;
+                    } else {
+                        productsByCategoryObj[categoryCode]?.push(product);
+                    }
+                }
+            });
+
+            objReturn.data = { categoriesObj: productsByCategoryObj, categoriesDictionary };
             objReturn.resStatus = 200;
         } catch (err) {
             console.log("controllers/getProducts - Error to get products mongo document - ERROR: ", err);
