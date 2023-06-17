@@ -1,3 +1,3 @@
 module.exports = {
-    "backendEndUrl": "http://localhost:8080"
+    "backendEndUrl": "http://localhost:3001"
 };

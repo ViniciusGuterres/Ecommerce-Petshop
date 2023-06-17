@@ -10,7 +10,7 @@ require('./routes/index.js')(app);
 app.use(cors());
 app.use(bodyParser.json());
 
-app.listen(8080, () => {
+app.listen(3001, () => {
     console.log('Server running on port 8080');
 
     // Stating mongo  
