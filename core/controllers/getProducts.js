@@ -78,29 +78,37 @@ async function getProducts(req, res, next) {
                         as: "category_obj"
                     }
                 }
-            ]);
+            ]).then(productDocuments => {
+                // Will loop through all products to separate each by category and convert the image to base64
+                productDocuments.forEach(product => {
+                    // Converting product image Buffer to Base64
+                    product.image = product.image.toString('ascii');
 
-            // Will loop through all products to separate each by category
-            getAllProductsResult?.forEach(product => {
-                const productCategory = product?.category_obj?.[0] || {};
+                    // Sorting out each product by category
+                    const productCategory = product?.category_obj?.[0] || {};
 
-                if (Object.keys(productCategory)?.length) {
-                    const { code: categoryCode, name: categoryName } = productCategory;
+                    if (Object.keys(productCategory)?.length) {
+                        const { code: categoryCode, name: categoryName } = productCategory;
 
-                    // If the category obj isn't initialized yet, do it, otherwise, just push the product in the current category
-                    if (!productsByCategoryObj[categoryCode]) {
-                        productsByCategoryObj[categoryCode] = [product];
-                        
-                        // Adding the category to the dictionary obj
-                        categoriesDictionary[categoryCode] = categoryName;
-                    } else {
-                        productsByCategoryObj[categoryCode]?.push(product);
+                        // If the category obj isn't initialized yet, do it, otherwise, just push the product in the current category
+                        if (!productsByCategoryObj[categoryCode]) {
+                            productsByCategoryObj[categoryCode] = [product];
+
+                            // Adding the category to the dictionary obj
+                            categoriesDictionary[categoryCode] = categoryName;
+                        } else {
+                            productsByCategoryObj[categoryCode]?.push(product);
+                        }
                     }
-                }
-            });
+                });
 
-            objReturn.data = { categoriesObj: productsByCategoryObj, categoriesDictionary };
-            objReturn.resStatus = 200;
+                objReturn.data = { categoriesObj: productsByCategoryObj, categoriesDictionary };
+                objReturn.resStatus = 200;
+            }).catch(err => {
+                console.log("controllers/getProducts - Error to get products mongo document - ERROR: ", err);
+                objReturn.error = err;
+                objReturn.resStatus = 500;
+            })
         } catch (err) {
             console.log("controllers/getProducts - Error to get products mongo document - ERROR: ", err);
             objReturn.error = err;
