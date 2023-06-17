@@ -69,7 +69,7 @@ function CustomersCrud() {
     /**
      * @function handleChangeCustomerLoginDataInput - Will get the input new value and setting the new value at state current obj key
      * @param {string} newValue - The login data input new value
-     * @param string} inputKey - The change login data input key e.g (email, password)
+     * @param {string} inputKey - The change login data input key e.g (email, password)
      */
     const handleChangeCustomerLoginDataInput = (newValue, inputKey) => {
         const customerLoginDataObjCopy = { ...customerLoginDataObj };
