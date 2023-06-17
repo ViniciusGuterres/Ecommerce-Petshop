@@ -1,5 +1,6 @@
 // Requires model
 const productModel = require('../models/product.js');
+const categoryModel = require('../models/category.js');
 
 async function getProducts(req, res, next) {
     res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
@@ -12,21 +13,39 @@ async function getProducts(req, res, next) {
         resStatus: null,
     };
 
-    const { name } = req.body;
-
     const productCodeParam = req?.params?.id || null;
 
-    if (name && (typeof name != 'string')) {
-        console.log("controllers/getProducts - name wrong format");
-        objReturn.error = "name wrong format";
+    if (
+        productCodeParam &&
+        (typeof productCodeParam != 'string' || typeof productCodeParam != 'number')
+    ) {
+        console.log("controllers/getProducts - productCodeParam wrong format");
+        objReturn.error = "productCodeParam wrong format";
         objReturn.resStatus = 400;
         controllerReturn(objReturn, res);
         return;
     }
 
+    /**
+     * @function controllers/getProducts/getProductByCode
+     * @summary - Will get the mongo product passed by param code
+     */
     async function getProductByCode() {
         try {
-            const getProductResult = await productModel.findOne({ code: productCodeParam });
+            // Getting the product, aggregating with category schema
+            const getProductResult = await productModel.aggregate([
+                {
+                    $match: { code: +productCodeParam }
+                },
+                {
+                    $lookup: {
+                        from: "categories",
+                        localField: "category",
+                        foreignField: "_id",
+                        as: "category_obj"
+                    }
+                }
+            ]);
 
             objReturn.data = getProductResult;
             objReturn.resStatus = 200;
@@ -39,25 +58,23 @@ async function getProducts(req, res, next) {
         }
     }
 
-    async function getProductByName() {
-        try {
-            // Filter product by fields using OR operator
-            const getProductResult = await productModel.find({ name });
-
-            objReturn.data = getProductResult;
-            objReturn.resStatus = 200;
-        } catch (err) {
-            console.log("controllers/getProducts - Error to get product by fields at mongo document, - ERROR: ", err);
-            objReturn.error = err;
-            objReturn.resStatus = 500;
-        } finally {
-            controllerReturn(objReturn, res);
-        }
-    }
-
+    /**
+     * @function controllers/getProducts/getProductByCode
+     * @summary - Will get all mongo products
+     */
     async function getAllProducts() {
         try {
-            const getAllProductsResult = await productModel.find({});
+            // Getting the products, aggregating with category schema
+            const getAllProductsResult = await productModel.aggregate([
+                {
+                    $lookup: {
+                        from: "categories",
+                        localField: "category",
+                        foreignField: "_id",
+                        as: "category_obj"
+                    }
+                }
+            ]);
 
             objReturn.data = getAllProductsResult;
             objReturn.resStatus = 200;
@@ -70,16 +87,10 @@ async function getProducts(req, res, next) {
         }
     }
 
-    // Getting product by code case has param, 
+    // Getting product by code case has param, otherwise, get all products 
     if (productCodeParam) {
         getProductByCode();
-    }
-    // Otherwise get by document fields case has it on body
-    else if (Object.keys(req.body)?.length) {
-        getProductByName();
-    }
-    // Else get all products by default
-    else {
+    } else {
         getAllProducts();
     }
 };
