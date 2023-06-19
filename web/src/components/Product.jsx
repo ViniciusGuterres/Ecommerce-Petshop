@@ -40,7 +40,7 @@ function Product({ name, image, price, rating, code, onClickToBuyProductFunction
 
     return (
         <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <a href={`/productDetais/${code}`}>
+            <a href={`/productDetails/${code}`}>
                 {/* Product img */}
                 <img
                     className="p-8 rounded-t-lg"
