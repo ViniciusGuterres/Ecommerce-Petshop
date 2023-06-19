@@ -78,8 +78,8 @@ async function saveProduct(req, res, next) {
         return;
     }
 
-    if (!comments || (typeof comments != 'object')) {
-        console.log("controllers/saveProduct - missing comments or wrong format");
+    if (comments && !Array.isArray(comments)) {
+        console.log("controllers/saveProduct - comments wrong format");
         objReturn.error = "missing comments or wrong format";
         objReturn.resStatus = 400;
         controllerReturn(objReturn, res);
