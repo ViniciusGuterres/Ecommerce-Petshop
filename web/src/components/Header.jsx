@@ -81,6 +81,10 @@ function Header() {
                     </div>
                 </div>
             </nav>
+            
+            <div className="bg-indigo-700 text-indigo-200 md:text-center py-2 px-4">
+                Para todos os tipos de PET
+            </div>
         </header>
     );
 }
