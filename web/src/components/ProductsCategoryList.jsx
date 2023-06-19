@@ -58,6 +58,7 @@ function ProductsCategoryList({ categoryName, products, sortProductsValue }) {
                     name={name}
                     price={price}
                     image={image}
+                    code={code}
                 />
             );
         });

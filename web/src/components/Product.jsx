@@ -4,9 +4,10 @@
  * @param {string} image - The product Base64 image
  * @param {number} price - The product price
  * @param {number} rating - The product rating based on clients experiences
+ * @param {number} code - The product DB identifier code
  * @param {function} onClickToBuyProductFunction - The function to handle when click to buy button
  */
-function Product({ name, image, price, rating, onClickToBuyProductFunction }) {
+function Product({ name, image, price, rating, code, onClickToBuyProductFunction }) {
     // Vars
     const priceFormattedToDecimals = price.toFixed(2)?.toString() || '';
     const priceFormatted = price ? `R$: ${priceFormattedToDecimals?.replace('.', ',')}` : '';
@@ -39,7 +40,7 @@ function Product({ name, image, price, rating, onClickToBuyProductFunction }) {
 
     return (
         <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
+            <a href={`/productDetais/${code}`}>
                 {/* Product img */}
                 <img
                     className="p-8 rounded-t-lg"
@@ -79,7 +80,7 @@ function Product({ name, image, price, rating, onClickToBuyProductFunction }) {
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
