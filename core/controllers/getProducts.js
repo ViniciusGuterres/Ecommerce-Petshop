@@ -32,7 +32,7 @@ async function getProducts(req, res, next) {
     async function getProductByCode() {
         try {
             // Getting the product, aggregating with category schema
-            const getProductResult = await productModel.aggregate([
+            await productModel.aggregate([
                 {
                     $match: { code: +productCodeParam }
                 },
@@ -44,10 +44,22 @@ async function getProducts(req, res, next) {
                         as: "category_obj"
                     }
                 }
-            ]);
+            ]).then(productDocument => {
+                const productDocumentReturned = productDocument?.[0] || []
 
-            objReturn.data = getProductResult;
-            objReturn.resStatus = 200;
+                // Will convert the product image to base64
+                if (productDocumentReturned?.image) {
+                    productDocumentReturned.image = productDocumentReturned.image?.toString('ascii');
+                }
+
+                objReturn.data = [productDocumentReturned];
+                objReturn.resStatus = 200;
+            }).catch(err => {
+                console.log("controllers/getProducts - Error to get product by code at mongo document, - ERROR: ", err);
+                objReturn.error = err;
+                objReturn.resStatus = 500;
+            });
+
         } catch (err) {
             console.log("controllers/getProducts - Error to get product by code at mongo document, - ERROR: ", err);
             objReturn.error = err;
@@ -68,7 +80,7 @@ async function getProducts(req, res, next) {
             const categoriesDictionary = {};
 
             // Getting the products, aggregating with category schema
-            const getAllProductsResult = await productModel.aggregate([
+            await productModel.aggregate([
                 {
                     $lookup: {
                         from: "categories",
@@ -107,7 +119,7 @@ async function getProducts(req, res, next) {
                 console.log("controllers/getProducts - Error to get products mongo document - ERROR: ", err);
                 objReturn.error = err;
                 objReturn.resStatus = 500;
-            })
+            });
         } catch (err) {
             console.log("controllers/getProducts - Error to get products mongo document - ERROR: ", err);
             objReturn.error = err;
