@@ -51,7 +51,7 @@ function ProductsCategoryList({ categoryName, products, sortProductsValue }) {
     const buildProducts = () => {
         const productsListSorted = sortProducts();
 
-        const productsList = productsListSorted?.map(({ name, price, image, code }) => {
+        const productsList = productsListSorted?.map(({ name, price, image, code, comments }) => {
             return (
                 <Product
                     key={`product_key_${code}`}
@@ -59,6 +59,7 @@ function ProductsCategoryList({ categoryName, products, sortProductsValue }) {
                     price={price}
                     image={image}
                     code={code}
+                    comments={comments}
                 />
             );
         });
