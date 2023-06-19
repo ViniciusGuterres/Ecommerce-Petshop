@@ -30,9 +30,8 @@ const productSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
-    Comments: {
-        type: String,
-        require: true,
+    comments: {
+        type: Array,
     }
 });
 
