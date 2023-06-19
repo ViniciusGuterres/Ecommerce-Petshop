@@ -1,6 +1,5 @@
 // Requires model
 const productModel = require('../models/product.js');
-const categoryModel = require('../models/category.js');
 
 async function getProducts(req, res, next) {
     res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
@@ -17,7 +16,7 @@ async function getProducts(req, res, next) {
 
     if (
         productCodeParam &&
-        (typeof productCodeParam != 'string' || typeof productCodeParam != 'number')
+        (typeof productCodeParam != 'string' && typeof productCodeParam != 'number')
     ) {
         console.log("controllers/getProducts - productCodeParam wrong format");
         objReturn.error = "productCodeParam wrong format";
