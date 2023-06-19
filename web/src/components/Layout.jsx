@@ -3,14 +3,11 @@ import '../index.css';
 // Components
 import Header from './Header.jsx';
 
-import CustomersCrud from '../views/CustomersCrud.js';
-
-function Layout() {
+function Layout({ children }) {
     return (
         <div>
             <Header />
-
-            <CustomersCrud />
+            {children}
         </div>
     );
 }

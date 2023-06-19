@@ -1,12 +1,13 @@
 import './App.css';
 
 import Layout from './components/Layout.jsx';
+import PageRoutes from './routes.js';
 
 function App() {
   return (
-    <div className="App">
-      <Layout />
-    </div>
+    <Layout>
+      <PageRoutes />
+    </Layout>
   );
 }
 
