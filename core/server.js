@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.listen(3001, () => {
-    console.log('Server running on port 8080');
+    console.log('Server running on port 3001');
 
     // Stating mongo  
     mongoDB();
