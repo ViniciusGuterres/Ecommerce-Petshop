@@ -7,6 +7,7 @@ import Layout from '../src/components/Layout.jsx';
 import HomeProducts from "./views/HomeProducts";
 import ProductDetails from "./views/ProductDetails";
 import Login from "./views/Login";
+import CustomersCrud from "./views/CustomersCrud.js";
 
 const PageRoutes = () => {
     return (
@@ -28,6 +29,15 @@ const PageRoutes = () => {
                         </Layout>
                     }
                     path='/productDetails/:id'
+                />
+
+                <Route
+                    element={
+                        <Layout>
+                            <CustomersCrud />
+                        </Layout>
+                    }
+                    path='/customerCrud'
                 />
 
                 <Route
