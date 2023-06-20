@@ -115,6 +115,16 @@ async function saveCustomer(req, res, next) {
     try {
         const customerObj = req.body;
 
+        // Check if the req email is already in use
+        const isEmailAlreadyInUse = await customerModel.isEmailAlreadyInUse(email);
+
+        if (isEmailAlreadyInUse) {
+            console.log('controllers/saveCustomer - The passed email is already in use');
+            objReturn.error = 'controllers/saveCustomer - The passed email is already in use';
+            objReturn.resStatus = 400;
+            return;
+        }
+
         // Getting the new customer id
         const maxMongoCustomerID = await customerModel.findOne({}).sort({ code: -1 });
         customerObj.code = maxMongoCustomerID == null ? 1 : maxMongoCustomerID.code + 1;

@@ -77,13 +77,13 @@ customersSchema.statics.isEmailAlreadyInUse = async function (email) {
     if (!email) throw new Error('Missing email');
     
     try {
-        const customer = this.findOne({ email });
-        if (customer) return false;
+        const customer = await this.findOne({ email });        
+        if (customer) return true;
             
-        return true;
+        return false;
     } catch(error) {
         console.log('isEmailAlreadyInUse method error - ', error.message);
-        return false;
+        return true;
     }
 }
 
