@@ -27,7 +27,8 @@ async function saveCustomer(req, res, next) {
         address,
         city,
         state,
-        profileImage
+        email,
+        password
     } = req.body;
 
     if (!name || (typeof name != 'string')) {
@@ -89,6 +90,22 @@ async function saveCustomer(req, res, next) {
     if (!state || (typeof state != 'string')) {
         console.log("controllers/saveCustomer - missing state or wrong format");
         objReturn.error = "missing state or wrong format";
+        objReturn.resStatus = 400;
+        controllerReturn(objReturn, res);
+        return;
+    }
+
+    if (!email || (typeof email != 'string')) {
+        console.log("controllers/saveCustomer - missing email or wrong format");
+        objReturn.error = "missing email or wrong format";
+        objReturn.resStatus = 400;
+        controllerReturn(objReturn, res);
+        return;
+    }
+
+    if (!password || (typeof password != 'string')) {
+        console.log("controllers/saveCustomer - missing password or wrong format");
+        objReturn.error = "missing password or wrong format";
         objReturn.resStatus = 400;
         controllerReturn(objReturn, res);
         return;
