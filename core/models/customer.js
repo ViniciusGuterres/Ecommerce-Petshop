@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const customersSchema = new mongoose.Schema({
     code: {
@@ -35,7 +36,55 @@ const customersSchema = new mongoose.Schema({
     },
     profileImage: {
         type: Buffer
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+});
+
+// Hashing password field
+customersSchema.pre('save', function (next) {
+    if (this.isModified('password')) {
+        bcrypt.hash(this.password, 8, (err, hash) => {
+            if (err) return next(err);
+            this.password = hash;
+            
+            next();
+        });
     }
 });
+
+// Method to decrypt the sended password and see if it match with the saved encrypted password
+customersSchema.method.comparePassword = async function (password) {
+    if (!password) throw new Error('Missing password');
+
+    try {
+        const bcryptCompareResult = await bcrypt.compare(password, this.password);
+
+        return bcryptCompareResult;
+    } catch (error) {
+        console.log(`Error comparing encrypting password, ${error}`);
+    }
+}
+
+// Method to verify if the passed email is already in use
+customersSchema.statics.isEmailAlreadyInUse = async function (email) {
+    if (!email) throw new Error('Missing email');
+    
+    try {
+        const customer = this.findOne({ email });
+        if (customer) return false;
+            
+        return true;
+    } catch(error) {
+        console.log('isEmailAlreadyInUse method error - ', error.message);
+        return false;
+    }
+}
 
 module.exports = mongoose.model('customers', customersSchema);
