@@ -45,7 +45,7 @@ const PageRoutes = () => {
                     path="/login"
                 />
 
-                <Route element={<h1>Page not found</h1>} path='*    ' />
+                <Route element={<h1>Page not found</h1>} path='*' />
             </Routes>
         </BrowserRouter>
     );
