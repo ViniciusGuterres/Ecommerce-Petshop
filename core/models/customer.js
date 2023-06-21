@@ -51,7 +51,7 @@ const customersSchema = new mongoose.Schema({
         type: String,
         select: false,
     },
-    dataInclusao: {
+    includeDate: {
         type: Date,
         default: Date.now
     },
