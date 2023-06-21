@@ -39,7 +39,7 @@ function Login() {
         fetch(`${BACKEND_SERVER_URL}/signInCustomer`, postOptions)
             .then(async response => {
                 const { data, error } = await response.json();
-                
+
                 console.log("🚀 ~ file: Login.js:43 ~ handleClickToLogin ~ error:", error);
                 console.log("🚀 ~ file: Login.js:42 ~ handleClickToLogin ~ data:", data)
 
@@ -65,6 +65,14 @@ function Login() {
                         title: "Succeso",
                         message: "Aguarde um momento, você está sendo redirecionado"
                     });
+
+                    localStorage.setItem("customerToken", data.token);
+
+                    setTimeout(() => {
+                        window.location.href = '/';
+
+
+                    }, 2000);
 
                     return;
                 }

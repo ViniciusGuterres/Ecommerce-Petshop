@@ -39,11 +39,21 @@ const customersSchema = new mongoose.Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: true,
+        lowercase: true
     },
     password: {
         type: String,
         required: true,
+    },
+    token: {
+        type: String,
+        select: false,
+    },
+    dataInclusao: {
+        type: Date,
+        default: Date.now
     },
 });
 
@@ -58,19 +68,6 @@ customersSchema.pre('save', function (next) {
         });
     }
 });
-
-// Method to decrypt the sended password and see if it match with the saved encrypted password
-customersSchema.method.comparePassword = async function (password) {
-    if (!password) throw new Error('Missing password');
-
-    try {
-        const bcryptCompareResult = await bcrypt.compare(password, this.password);
-
-        return bcryptCompareResult;
-    } catch (error) {
-        console.log(`Error comparing encrypting password, ${error}`);
-    }
-}
 
 // Method to verify if the passed email is already in use
 customersSchema.statics.isEmailAlreadyInUse = async function (email) {
