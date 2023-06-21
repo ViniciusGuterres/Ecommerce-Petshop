@@ -5,8 +5,11 @@
  * @param {string=} placeholder - The input placeholder string
  * @param {string=} cssClass - The tailwind class
  * @param {string=} dataKey - The input key name
+ * @param {string=} type - The input native type
+ * @param {string} name - The input name htmlFor
+ * @param {boolean=} required - The boolean that indicates if the input value is required or not
  */
-function Input({ value, onChange, placeholder, cssClass, type, dataKey }) {
+function Input({ value, onChange, placeholder, cssClass, type, dataKey, name, required }) {
 
     // Functions
     /**
@@ -28,6 +31,8 @@ function Input({ value, onChange, placeholder, cssClass, type, dataKey }) {
             placeholder={placeholder}
             className={cssClass}
             type={type}
+            name={name}
+            required={required || false}
         />
     );
 }
