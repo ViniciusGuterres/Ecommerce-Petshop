@@ -70,8 +70,6 @@ function Login() {
 
                     setTimeout(() => {
                         window.location.href = '/';
-
-
                     }, 2000);
 
                     return;

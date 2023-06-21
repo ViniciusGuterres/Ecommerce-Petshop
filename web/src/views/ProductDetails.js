@@ -10,6 +10,7 @@ const BACKEND_SERVER_URL = settings.backendEndUrl;
 
 function ProductDetails() {
     const [product, setProduct] = useState({});
+    const [quantity, setQuantity] = useState(1);
 
     // Vars
     const { id } = useParams();
@@ -50,7 +51,38 @@ function ProductDetails() {
             setProduct(data[0]);
         }
     }
+    
+    const handleClickAddToCart = () => {
+        const localStorageCustomerToken = localStorage.getItem("customerToken");
+        const localStorageCustomerCart = localStorage.getItem("customerCart");
+        let localStorageCustomerCartParse = {};
 
+        if (localStorageCustomerCart) {
+            try {
+                localStorageCustomerCartParse = JSON.parse(localStorageCustomerCart);
+
+            } catch (err) {
+                console.log('error: ', err);
+            }
+        }
+
+        // If customer is not auth, send to login screen
+        if (!localStorageCustomerToken) {
+            window.location.href = '/login';
+            return;
+        }
+
+        // Update customer cart
+        const customerCartCopy = { ...localStorageCustomerCartParse } || {};
+
+        customerCartCopy[product.code] = {
+            code: product.code,
+            amount: quantity
+        };
+
+        localStorage.setItem("customerCart", JSON.stringify(customerCartCopy));
+    }
+    
     /**
      *  @function views/ProductDetails/calcProductAverageRating - Will calc the product average based on product's comments array
      * @returns {number} - The product average rating
@@ -256,6 +288,7 @@ function ProductDetails() {
                                 <button
                                     type="button"
                                     className="h-14 px-6 py-2 font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white"
+                                    onClick={handleClickAddToCart}
                                 >
                                     Adicionar ao carrinho
                                 </button>
