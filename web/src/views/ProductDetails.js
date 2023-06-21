@@ -129,7 +129,10 @@ function ProductDetails() {
     const buildCommentsSectionElement = () => {
         const reviewsElement = product?.comments?.map(({ rating, text }) => {
             return (
-                <div className="bg-white max-w-xl rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500">
+                <div
+                    className="bg-white max-w-xl rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500"
+                    key={`Product_details_comment_${rating}_${text}`}
+                >
                     <div className="mt-4">
                         <h1 className="text-lg text-gray-700 font-semibold hover:underline cursor-pointer">Product Review</h1>
                         <div className="flex mt-2">
@@ -179,7 +182,7 @@ function ProductDetails() {
                         {/* Chevron */}
                         <span>
                             <svg className="h-5 w-5 leading-none text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                             </svg>
                         </span>
 
@@ -191,7 +194,7 @@ function ProductDetails() {
                         {/* Chevron */}
                         <span>
                             <svg className="h-5 w-5 leading-none text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                             </svg>
                         </span>
 
