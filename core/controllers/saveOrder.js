@@ -100,27 +100,38 @@ async function saveOrder(req, res, next) {
                 $in: productsIds,
             }
         }).then(doc => {
-            doc?.forEach(({ code, _id }) => {
-                mongoProductsObj[code] = _id;
+            doc?.forEach(({ code, _id, price }) => {
+                mongoProductsObj[code] = {
+                    _id,
+                    price,
+                }
             });
         });
 
         const newProducts = [];
         let invalidProductCode = null;
+        let totalPrice = null;
 
         for (let i = 0; i < products.length; i++) {
             const productRow = products[i];
-            const currentMongoObj = mongoProductsObj[productRow.code];
+            const productAmount = productRow.amount;
+
+            const currentMongoProductObj = mongoProductsObj[productRow.code];            
 
             // Verifying if the product exist at mongo, otherwise, push in to new products array
-            if (!currentMongoObj) {
+            if (!currentMongoProductObj) {
                 invalidProductCode = productRow.code;
                 break;
             }
 
+            const productPriceOrderWithQtd = currentMongoProductObj.price * productAmount;
+
+            // sum total price
+            totalPrice += productPriceOrderWithQtd;
+
             newProducts.push({
-                amount: productRow.amount,
-                _id: currentMongoObj._id
+                amount: productAmount,
+                _id: currentMongoProductObj._id
             });
         }
 
@@ -131,7 +142,11 @@ async function saveOrder(req, res, next) {
             return;
         }
 
+        // Init as 'faturado' by default
+        orderObj.status = 'faturado';
+
         orderObj.products = newProducts;
+        orderObj.total = totalPrice;
 
         // Creating order document
         const createOrderResult = await orderModel.create(orderObj);
