@@ -143,7 +143,7 @@ async function saveOrder(req, res, next) {
         }
 
         // Init as 'faturado' by default
-        orderObj.status = 'faturado';
+        orderObj.status = ' aguardando pagamento';
 
         orderObj.products = newProducts;
         orderObj.total = totalPrice;
