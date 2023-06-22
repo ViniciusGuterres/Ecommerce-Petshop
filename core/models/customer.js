@@ -34,6 +34,10 @@ const customersSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    zipCode: {
+        type: Number,
+        required: true
+    },
     profileImage: {
         type: Buffer
     },

@@ -26,7 +26,7 @@ async function saveOrder(req, res, next) {
         products
     } = req.body;
 
-    if (!customerId || (typeof customerId != 'string' && typeof customerId != 'number')) {
+    if (!customerId || (typeof customerId != 'number')) {
         console.log("controllers/saveOrder - missing customerId or wrong format");
         objReturn.error = "missing customerId or wrong format";
         objReturn.resStatus = 400;
@@ -70,7 +70,7 @@ async function saveOrder(req, res, next) {
         }
 
         // Build products list
-        const productsIds = [];
+        const productsIds = [];4
         let invalidPositionProduct = null;
 
         for (let i = 0; i < products.length; i++) {
@@ -142,8 +142,10 @@ async function saveOrder(req, res, next) {
             return;
         }
 
+        orderObj.customer = mongoCustomer._id;
+
         // Init as 'faturado' by default
-        orderObj.status = ' aguardando pagamento';
+        orderObj.status = 'aguardando pagamento';
 
         orderObj.products = newProducts;
         orderObj.total = totalPrice;

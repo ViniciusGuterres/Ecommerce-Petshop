@@ -27,6 +27,7 @@ async function saveCustomer(req, res, next) {
         address,
         city,
         state,
+        zipCode,
         email,
         password,
         cardName,
@@ -90,6 +91,15 @@ async function saveCustomer(req, res, next) {
         controllerReturn(objReturn, res);
         return;
     }
+
+    if (!zipCode || (typeof zipCode != 'number')) {
+        console.log("controllers/saveCustomer - missing zipCode or wrong format");
+        objReturn.error = "missing zipCode or wrong format";
+        objReturn.resStatus = 400;
+        controllerReturn(objReturn, res);
+        return;
+    }
+
 
     if (!state || (typeof state != 'string')) {
         console.log("controllers/saveCustomer - missing state or wrong format");
