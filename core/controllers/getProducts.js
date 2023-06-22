@@ -12,17 +12,14 @@ async function getProducts(req, res, next) {
         resStatus: null,
     };
 
-    const productCodeParam = req?.params?.id || null;
+    let productCodeParam = req?.params?.id || null;
 
-    if (
-        productCodeParam &&
-        (typeof productCodeParam != 'string' && typeof productCodeParam != 'number')
-    ) {
-        console.log("controllers/getProducts - productCodeParam wrong format");
-        objReturn.error = "productCodeParam wrong format";
-        objReturn.resStatus = 400;
-        controllerReturn(objReturn, res);
-        return;
+    try {
+        productCodeParam = JSON.parse(productCodeParam);
+    } catch (err) {
+        console.log("controllers/getProducts - Error to parse productCodeParam JSON: ", err);
+        objReturn.error = err;
+        objReturn.resStatus = 500;
     }
 
     /**
@@ -53,6 +50,54 @@ async function getProducts(req, res, next) {
                 }
 
                 objReturn.data = [productDocumentReturned];
+                objReturn.resStatus = 200;
+            }).catch(err => {
+                console.log("controllers/getProducts - Error to get product by code at mongo document, - ERROR: ", err);
+                objReturn.error = err;
+                objReturn.resStatus = 500;
+            });
+
+        } catch (err) {
+            console.log("controllers/getProducts - Error to get product by code at mongo document, - ERROR: ", err);
+            objReturn.error = err;
+            objReturn.resStatus = 500;
+        } finally {
+            controllerReturn(objReturn, res);
+        }
+    }
+
+    /**
+ * @function controllers/getProducts/getProductsList
+ * @summary - Will get the mongo product passed by param list codes
+ */
+    async function getProductsList() {
+        try {
+            const productIds = productCodeParam.productList.map(code => +code);
+
+            // Getting the product, aggregating with category schema
+            await productModel.aggregate([
+                {
+                    $match: { code: { $in: productIds } }
+                },
+                {
+                    $lookup: {
+                        from: "categories",
+                        localField: "category",
+                        foreignField: "_id",
+                        as: "category_obj"
+                    }
+                }
+            ]).then(productDocument => {
+                const productDocumentReturned = productDocument?.map(product => {
+                    // Will convert the product image to base64
+                    if (product?.image) {
+                        product.image = product.image?.toString('ascii');
+                    }
+
+                    return product;
+                });
+
+                objReturn.data = productDocumentReturned;
                 objReturn.resStatus = 200;
             }).catch(err => {
                 console.log("controllers/getProducts - Error to get product by code at mongo document, - ERROR: ", err);
@@ -130,7 +175,9 @@ async function getProducts(req, res, next) {
     }
 
     // Getting product by code case has param, otherwise, get all products 
-    if (productCodeParam) {
+    if (productCodeParam?.productList?.length) {
+        getProductsList();
+    } else if (productCodeParam && (typeof productCodeParam == 'number' || typeof productCodeParam == 'string')) {
         getProductByCode();
     } else {
         getAllProducts();

@@ -67,6 +67,7 @@ function Login() {
                     });
 
                     localStorage.setItem("customerToken", data.token);
+                    localStorage.setItem("customer", data.code);
 
                     setTimeout(() => {
                         window.location.href = '/';

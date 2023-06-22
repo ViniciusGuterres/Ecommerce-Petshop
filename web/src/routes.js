@@ -8,6 +8,7 @@ import HomeProducts from "./views/HomeProducts";
 import ProductDetails from "./views/ProductDetails";
 import Login from "./views/Login";
 import CustomersCrud from "./views/CustomersCrud.js";
+import Checkout from "./views/Checkout.js";
 
 const PageRoutes = () => {
     return (
@@ -38,6 +39,15 @@ const PageRoutes = () => {
                         </Layout>
                     }
                     path='/customerCrud'
+                />
+
+                <Route
+                    element={
+                        <Layout>
+                            <Checkout />
+                        </Layout>
+                    }
+                    path='/checkout'
                 />
 
                 <Route
