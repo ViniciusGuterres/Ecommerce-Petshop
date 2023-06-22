@@ -28,7 +28,11 @@ async function saveCustomer(req, res, next) {
         city,
         state,
         email,
-        password
+        password,
+        cardName,
+        cardNumber,
+        cardCVC,
+        cardExpirationDate,
     } = req.body;
 
     if (!name || (typeof name != 'string')) {
@@ -106,6 +110,38 @@ async function saveCustomer(req, res, next) {
     if (!password || (typeof password != 'string')) {
         console.log("controllers/saveCustomer - missing password or wrong format");
         objReturn.error = "missing password or wrong format";
+        objReturn.resStatus = 400;
+        controllerReturn(objReturn, res);
+        return;
+    }
+
+    if (!cardName || (typeof cardName != 'string')) {
+        console.log("controllers/saveCustomer - missing cardName or wrong format");
+        objReturn.error = "missing cardName or wrong format";
+        objReturn.resStatus = 400;
+        controllerReturn(objReturn, res);
+        return;
+    }
+
+    if (!cardNumber || (typeof cardNumber != 'number')) {
+        console.log("controllers/saveCustomer - missing cardNumber or wrong format");
+        objReturn.error = "missing cardNumber or wrong format";
+        objReturn.resStatus = 400;
+        controllerReturn(objReturn, res);
+        return;
+    }
+
+    if (!cardCVC || (typeof cardCVC != 'string')) {
+        console.log("controllers/saveCustomer - missing cardCVC or wrong format");
+        objReturn.error = "missing cardCVC or wrong format";
+        objReturn.resStatus = 400;
+        controllerReturn(objReturn, res);
+        return;
+    }
+
+    if (!cardExpirationDate) {
+        console.log("controllers/saveCustomer - missing cardExpirationDate");
+        objReturn.error = "missing cardExpirationDate";
         objReturn.resStatus = 400;
         controllerReturn(objReturn, res);
         return;
