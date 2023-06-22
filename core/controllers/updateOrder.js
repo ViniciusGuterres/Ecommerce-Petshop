@@ -42,7 +42,7 @@ async function updateOrder(req, res, next) {
     } = req.body;
 
     if (
-        !status || (typeof name != 'string')
+        !status
         || (
             status != 'faturado' 
             && status != 'agurdando pagamento'
