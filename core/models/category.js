@@ -3,15 +3,15 @@ const mongoose = require('mongoose');
 const categoriesSchema = new mongoose.Schema({
     code: {
         type: Number,
-        require: true,
+        required: true,
     },
     name: {
         type: String,
-        require: true
+        required: true
     },
     description: {
         type: String,
-        require: true
+        required: true
     },
 });
 

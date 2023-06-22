@@ -3,22 +3,22 @@ const mongoose = require('mongoose');
 const ordersSchema = new mongoose.Schema({
     code: {
         type: Number,
-        require: true,
+        required: true,
     },
     total: {
         type: Number,
-        require: true,
+        required: true,
     },
     customer: {
         type: mongoose.Schema.Types.ObjectId,
         refs: 'customers',
-        require: true,
+        required: true,
     },
     products: [
         {
             type: mongoose.Schema.Types.ObjectId,
             refs: 'products',
-            require: true,
+            required: true,
         }
     ],
     includeDate: {
@@ -27,7 +27,7 @@ const ordersSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        require: true
+        required: true
     }
 });
 
