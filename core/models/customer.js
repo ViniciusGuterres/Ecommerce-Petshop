@@ -4,35 +4,35 @@ const bcrypt = require('bcryptjs');
 const customersSchema = new mongoose.Schema({
     code: {
         type: Number,
-        require: true,
+        required: true,
     },
     name: {
         type: String,
-        require: true
+        required: true
     },
     lastName: {
         type: String,
-        require: true
+        required: true
     },
     cpf: {
         type: Number,
-        require: true
+        required: true
     },
     telephone: {
         type: Number,
-        require: true
+        required: true
     },
     address: {
         type: String,
-        require: true
+        required: true
     },
     city: {
         type: String,
-        require: true
+        required: true
     },
     state: {
         type: String,
-        require: true
+        required: true
     },
     profileImage: {
         type: Buffer
@@ -55,6 +55,22 @@ const customersSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    cardName: {
+        type: String,
+        required: true,
+    },
+    cardNumber: {
+        type: Number,
+        required: true,
+    },
+    cardCVC: {
+        type: String,
+        required: true,
+    },
+    cardExpirationDate: {
+        type: String,
+        required: true,
+    }
 });
 
 // Hashing password field
@@ -63,6 +79,18 @@ customersSchema.pre('save', function (next) {
         bcrypt.hash(this.password, 8, (err, hash) => {
             if (err) return next(err);
             this.password = hash;
+            
+            next();
+        });
+    }
+});
+
+// Hashing cardCVC field
+customersSchema.pre('save', function (next) {
+    if (this.isModified('cardCVC')) {
+        bcrypt.hash(this.cardCVC, 8, (err, hash) => {
+            if (err) return next(err);
+            this.cardCVC = hash;
             
             next();
         });
