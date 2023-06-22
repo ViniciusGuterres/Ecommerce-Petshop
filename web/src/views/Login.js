@@ -40,9 +40,6 @@ function Login() {
             .then(async response => {
                 const { data, error } = await response.json();
 
-                console.log("🚀 ~ file: Login.js:43 ~ handleClickToLogin ~ error:", error);
-                console.log("🚀 ~ file: Login.js:42 ~ handleClickToLogin ~ data:", data)
-
                 if (error === "controllers/signInCustomer - Email or password invalid") {
                     setTimeout(() => {
                         setAlertModal(null);
