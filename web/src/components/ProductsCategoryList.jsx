@@ -2,7 +2,7 @@
 import Product from "./Product";
 
 /**
- * @function ProductsCategoryList - 
+ * @function ProductsCategoryList - Will render products list separated by category
  * @param {string} categoryName - The category name
  * @param {object[]} products - The array with all category's products objects 
  * @param {string} sortProductsValue - The sort products logic value ('lowestPrice', 'biggestPrice') 

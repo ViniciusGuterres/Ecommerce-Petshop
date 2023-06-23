@@ -5,7 +5,9 @@ import userPlaceholder from '../images/userDefaultPlaceholder.jpg';
 
 /**
  * @function UploadInput - Input to upload img, returns files in Base64
- * @param {string} img - The uploaded img Base64
+ * @param {string=} img - The uploaded img Base64
+ * @param {string=} dataKey - The img data key to send in onChangeFunction second param
+ * @param {function=} onChangeFunction - The function to be called when the uploaded file changed
  */
 function UploadInput({ img, dataKey, onChangeFunction }) {
     // Globals vars

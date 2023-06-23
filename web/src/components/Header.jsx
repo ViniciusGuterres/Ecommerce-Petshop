@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import logo from '../images/logo.png';
 
+/**
+ * @function Header - Will render the Header 
+ */
 function Header() {
     const [isCustomerLogged, setIsCustomerLogged] = useState(false);
     const [cartProductsAmount, setCartProductsAmount] = useState(null);
@@ -22,6 +25,10 @@ function Header() {
         }
     }, []);
 
+    /**
+    * @function components/Button/buildCartProductElements - Will build the checkout button and cart's products amount
+    * @return {Element} - React Element
+    */
     const buildCartProductElements = () => {
         return (
             <div className="flex items-center lg:order-2">

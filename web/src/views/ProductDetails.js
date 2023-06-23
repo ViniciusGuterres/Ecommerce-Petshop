@@ -120,6 +120,8 @@ function ProductDetails() {
      */
     const buildRatingElement = () => {
         const productAverageRating = calcProductAverageRating();
+        const productAverageRatingFormatted = productAverageRating.toFixed(2);
+
         let starsAmount = 0;
 
         // Setting the amount of product stars based on product average rating
@@ -158,7 +160,7 @@ function ProductDetails() {
                 <span
                     className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3"
                 >
-                    {productAverageRating?.toString()?.replace('.', ',')}
+                    {productAverageRatingFormatted?.toString()?.replace('.', ',')}
                 </span>
             </div>
         );
