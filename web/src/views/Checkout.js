@@ -155,8 +155,6 @@ function Checkout() {
             customerId: +customerCode
         };
 
-        console.log("🚀 ~ file: Checkout.js:151 ~ handleClickToFinishOrder ~ orderBodyObj:", orderBodyObj)
-
         // Calling get products controller
         const getOptions = {
             method: 'POST',
@@ -180,7 +178,7 @@ function Checkout() {
                     alert('Pedido criado com sucesso! ');
 
                     // Clean customer cart local storage
-                    localStorage.setItem('customerCart', {});
+                    localStorage.removeItem('customerCart');
 
                     setTimeout(() => {
                         window.location.href = '/';

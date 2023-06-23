@@ -35,7 +35,7 @@ const customersSchema = new mongoose.Schema({
         required: true
     },
     zipCode: {
-        type: Number,
+        type: String,
         required: true
     },
     profileImage: {
@@ -64,7 +64,7 @@ const customersSchema = new mongoose.Schema({
         required: true,
     },
     cardNumber: {
-        type: Number,
+        type: String,
         required: true,
     },
     cardCVC: {

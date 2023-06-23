@@ -23,6 +23,8 @@ function CustomersCrud() {
         address: '',
         city: '',
         state: '',
+        zipCode: '',
+        profileImage: ''
     };
 
     const customerLoginDataDefaultFieldsObj = {
@@ -31,10 +33,10 @@ function CustomersCrud() {
     };
 
     const customerCreditCardDataDefaultFieldsObj = {
-        number: '',
-        cvc: '',
-        nameOnCard: '',
-        expirationDate: '',
+        cardNumber: '',
+        cardCVC: '',
+        cardName: '',
+        cardExpirationDate: '',
     };
 
     // States
@@ -46,6 +48,20 @@ function CustomersCrud() {
 
 
     // Functions
+    const checkIfAllFieldsAreFilled = () => {
+        const personalDataValues = Object.values(customerPersonalDataObj);
+        const loginDataValues = Object.values(customerLoginDataObj);
+        const creditCardDataValues = Object.values(customerCreditCardDataObj);
+
+        const fieldsValues = [
+            ...personalDataValues,
+            ...loginDataValues,
+            ...creditCardDataValues
+        ];
+
+        return fieldsValues.every(value => value != '');
+    }
+
     /**
      * @function handleChangeCustomerPersonalDataInput - Will get the input new value and setting the new value at state current obj key
      * @param {string} newValue - The personal data input new value
@@ -84,7 +100,7 @@ function CustomersCrud() {
      * @param {string} inputKey - The change credit card data input key e.g (email, password)
      */
     const handleChangeCustomerCreditCardDataInput = (newValue, inputKey) => {
-        const customerCreditCardDataObjCopy = { ...customerLoginDataObj };
+        const customerCreditCardDataObjCopy = { ...customerCreditCardDataObj };
         customerCreditCardDataObjCopy[inputKey] = newValue;
 
         setCustomerCreditCardDataObj(customerCreditCardDataObjCopy);
@@ -105,6 +121,8 @@ function CustomersCrud() {
                         address={customerPersonalDataObj.address}
                         city={customerPersonalDataObj.city}
                         state={customerPersonalDataObj.state}
+                        zipCode={customerPersonalDataObj.zipCode}
+                        profileImage={customerPersonalDataObj.profileImage}
                         handleChangeInput={handleChangeCustomerPersonalDataInput}
                     />
                 );
@@ -121,10 +139,10 @@ function CustomersCrud() {
             case 'creditCardData': {
                 return (
                     <CreditCardDataForm
-                        nameOnCard={customerCreditCardDataObj.nameOnCard}
-                        cvc={customerCreditCardDataObj.cvc}
-                        expirationDate={customerCreditCardDataObj.expirationDate}
-                        number={customerCreditCardDataObj.number}
+                        cardName={customerCreditCardDataObj.cardName}
+                        cardCVC={customerCreditCardDataObj.cardCVC}
+                        cardExpirationDate={customerCreditCardDataObj.cardExpirationDate}
+                        cardNumber={customerCreditCardDataObj.cardNumber}
                         handleChangeInput={handleChangeCustomerCreditCardDataInput}
                     />
                 );
@@ -144,7 +162,19 @@ function CustomersCrud() {
     }
 
     const handleClickSaveCustomer = () => {
-        const jsonData = JSON.stringify(customerPersonalDataObj);
+        if (!checkIfAllFieldsAreFilled()) {
+            alert('Por favor, preencha todos os campos! ');
+            return;
+        }
+
+        // build response obj
+        const body = {
+            ...customerPersonalDataObj,
+            ...customerLoginDataObj,
+            ...customerCreditCardDataObj
+        }
+
+        const jsonData = JSON.stringify(body);
 
         // Calling saving customer controller
         const postOptions = {
@@ -156,8 +186,24 @@ function CustomersCrud() {
         };
 
         fetch(`${BACKEND_SERVER_URL}/saveCustomer`, postOptions)
-            .then(response => response.text())
-            .then(text => console.log('text:: ', text))
+            .then(async (response) => {
+                const { data, error } = await response?.json();
+
+                if (error) {
+                    console.log('error: ', error);
+
+                    alert('Um erro inesperado ocorreu !');
+                    return;
+                }
+
+                alert('Formulário enviado com sucesso !');
+
+                if (crudMode !== 'edit') {
+                    window.location.href = '/login';
+                } else {
+                    window.location.href = '/';
+                }
+            })
             .catch(err => console.log('Error::: ', err.message));
     }
 
@@ -243,7 +289,7 @@ function CustomersCrud() {
     );
 }
 
-function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state, handleChangeInput }) {
+function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state, zipCode, profileImage, handleChangeInput }) {
     return (
         <form>
             <div className="max-w-2xl mx-auto">
@@ -321,11 +367,23 @@ function PersonalDataForm({ name, lastName, cpf, telephone, address, city, state
                         dataKey='state'
                         cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                     />
+
+                    {/* ZipCode */}
+                    <Input
+                        value={zipCode}
+                        type={'text'}
+                        onChange={handleChangeInput}
+                        placeholder='CEP'
+                        dataKey='zipCode'
+                        cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
+                    />
                 </div>
 
                 {/* Profile img */}
                 <UploadInput
-                    dataKey='profileImg'
+                    img={profileImage}
+                    dataKey='profileImage'
+                    onChangeFunction={handleChangeInput}
                 />
             </div>
         </form>
@@ -358,46 +416,46 @@ function LoginDataForm({ email, password, handleChangeInput }) {
     );
 }
 
-function CreditCardDataForm({ nameOnCard, number, expirationDate, cvc, handleChangeInput }) {
+function CreditCardDataForm({ cardName, cardNumber, cardExpirationDate, cardCVC, handleChangeInput }) {
     return (
         <form>
             <div className="max-w-2xl mx-auto">
                 <Input
-                    value={nameOnCard}
+                    value={cardName}
                     type={'text'}
                     onChange={handleChangeInput}
                     placeholder='Nome no Cartão'
-                    dataKey='nameOnCard'
+                    dataKey='cardName'
                     cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                 />
 
                 <Input
-                    value={number}
+                    value={cardNumber}
                     type={'number'}
                     onChange={handleChangeInput}
                     placeholder='Número'
-                    dataKey='number'
+                    dataKey='cardNumber'
                     cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                 />
 
                 <div className="flex gap-2">
                     {/* Expiration date */}
                     <Input
-                        value={expirationDate}
+                        value={cardExpirationDate}
                         type={'text'}
                         onChange={handleChangeInput}
                         placeholder='Data da Validade'
-                        dataKey='expirationDate'
+                        dataKey='cardExpirationDate'
                         cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                     />
 
                     {/* CVC */}
                     <Input
-                        value={cvc}
+                        value={cardCVC}
                         type={'number'}
                         onChange={handleChangeInput}
                         placeholder='CVC'
-                        dataKey='cvc'
+                        dataKey='cardCVC'
                         cssClass='text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400'
                     />
                 </div>

@@ -7,7 +7,7 @@ import userPlaceholder from '../images/userDefaultPlaceholder.jpg';
  * @function UploadInput - Input to upload img, returns files in Base64
  * @param {string} img - The uploaded img Base64
  */
-function UploadInput({ img }) {
+function UploadInput({ img, dataKey, onChangeFunction }) {
     // Globals vars
     const defaultImg = img || userPlaceholder;
 
@@ -45,6 +45,7 @@ function UploadInput({ img }) {
 
         if (base64File) {
             setUploadImgSrc(base64File);
+            onChangeFunction(base64File, dataKey);
         }
     }
 

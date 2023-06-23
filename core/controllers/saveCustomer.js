@@ -19,7 +19,7 @@ async function saveCustomer(req, res, next) {
         return;
     }
 
-    const {
+    let {
         name,
         lastName,
         cpf,
@@ -92,7 +92,7 @@ async function saveCustomer(req, res, next) {
         return;
     }
 
-    if (!zipCode || (typeof zipCode != 'number')) {
+    if (!zipCode || (typeof zipCode != 'number' && typeof zipCode != 'string')) {
         console.log("controllers/saveCustomer - missing zipCode or wrong format");
         objReturn.error = "missing zipCode or wrong format";
         objReturn.resStatus = 400;
@@ -133,7 +133,7 @@ async function saveCustomer(req, res, next) {
         return;
     }
 
-    if (!cardNumber || (typeof cardNumber != 'number')) {
+    if (!cardNumber || (typeof cardNumber != 'number' && typeof cardName != 'string')) {
         console.log("controllers/saveCustomer - missing cardNumber or wrong format");
         objReturn.error = "missing cardNumber or wrong format";
         objReturn.resStatus = 400;
@@ -141,7 +141,7 @@ async function saveCustomer(req, res, next) {
         return;
     }
 
-    if (!cardCVC || (typeof cardCVC != 'string')) {
+    if (!cardCVC || (typeof cardCVC != 'string' && typeof cardNumber != 'number')) {
         console.log("controllers/saveCustomer - missing cardCVC or wrong format");
         objReturn.error = "missing cardCVC or wrong format";
         objReturn.resStatus = 400;
