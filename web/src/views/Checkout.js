@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-import jwt from 'jwt-decode'
-
 import settings from "../settings.js";
 
 // Globals const
