@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import {
-    useParams
-} from "react-router-dom";
 
 // Components
 import Input from "../components/Input.jsx";
@@ -17,9 +14,6 @@ function CustomersCrud() {
     // Globals vars
     const defaultTabClass = 'inline-block text-gray-500 hover:text-gray-600 hover:border-gray-300 rounded-t-lg py-4 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300';
     const selectedTabClass = 'text-primary-700 border-primary-700 inline-block rounded-t-lg py-4 px-4 text-sm font-medium text-center border-transparent border-b-2 dark:text-gray-400 dark:hover:text-gray-300';
-
-    // CustomerId
-    const { id: customerId } = useParams();
 
     const customerPersonalDataDefaultFieldsObj = {
         name: '',
@@ -45,6 +39,9 @@ function CustomersCrud() {
         cardExpirationDate: '',
     };
 
+    // Getting customer code
+    const customerId = localStorage.getItem('customer');
+
     // States
     const [customerPersonalDataObj, setCustomerPersonalDataObj] = useState(customerPersonalDataDefaultFieldsObj);
     const [customerLoginDataObj, setCustomerLoginDataObj] = useState(customerLoginDataDefaultFieldsObj);
@@ -54,7 +51,6 @@ function CustomersCrud() {
 
     useEffect(() => {
         // Calling get customer controller if has param has customerID
-        console.log("🚀 ~ file: CustomersCrud.js:58 ~ useEffect ~ customerId:", customerId)
         if (customerId != null) {
             const getOptions = {
                 method: 'GET',
@@ -277,7 +273,13 @@ function CustomersCrud() {
             },
         };
 
-        fetch(`${BACKEND_SERVER_URL}/saveCustomer`, postOptions)
+        let customerController = 'saveCustomer';
+
+        if (customerId != null) {
+            customerController = `updateCustomer/${customerId}`;
+        }
+
+        fetch(`${BACKEND_SERVER_URL}/${customerController}`, postOptions)
             .then(async (response) => {
                 const { data, error } = await response?.json();
 
