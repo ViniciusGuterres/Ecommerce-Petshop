@@ -38,7 +38,7 @@ const PageRoutes = () => {
                             <CustomersCrud />
                         </Layout>
                     }
-                    path='/customerCrud'
+                    path='/customerCrud/:id?'
                 />
 
                 <Route
