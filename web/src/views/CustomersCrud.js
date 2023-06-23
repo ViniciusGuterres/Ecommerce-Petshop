@@ -144,7 +144,6 @@ function CustomersCrud() {
     }
 
     const handleClickSaveCustomer = () => {
-
         const jsonData = JSON.stringify(customerPersonalDataObj);
 
         // Calling saving customer controller
@@ -223,14 +222,23 @@ function CustomersCrud() {
             </div>
 
             {/* Forms content */}
-            {buildCurrentTabForm()}
+            <div style={{ height: '500px' }}>
+                {buildCurrentTabForm()}
+            </div>
 
             {/* Save Button */}
-            <Button
-                onClickFunction={handleClickSaveCustomer}
-                placeholder='Salvar'
-                cssClass='text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800'
-            />
+            <div style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: '50px'
+            }}>
+                <Button
+                    onClickFunction={handleClickSaveCustomer}
+                    placeholder='Salvar'
+                    cssClass='text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800'
+                />
+            </div>
         </div>
     );
 }
