@@ -51,7 +51,7 @@ function ProductDetails() {
             setProduct(data[0]);
         }
     }
-    
+
     const handleClickAddToCart = () => {
         const localStorageCustomerToken = localStorage.getItem("customerToken");
         const localStorageCustomerCart = localStorage.getItem("customerCart");
@@ -81,8 +81,18 @@ function ProductDetails() {
         };
 
         localStorage.setItem("customerCart", JSON.stringify(customerCartCopy));
+        alert('Produto adicionado ao carrinho! ');
+
+        // go back to home  
+        window.location.href = '/';
     }
-    
+
+    const handleOnChangeProductAmount = evt => {
+        const value = evt.target.value;
+
+        setQuantity(value);
+    }
+
     /**
      *  @function views/ProductDetails/calcProductAverageRating - Will calc the product average based on product's comments array
      * @returns {number} - The product average rating
@@ -162,8 +172,16 @@ function ProductDetails() {
         const reviewsElement = product?.comments?.map(({ rating, text }) => {
             return (
                 <div
-                    className="bg-white max-w-xl rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500"
                     key={`Product_details_comment_${rating}_${text}`}
+                    style={{
+                        width: '200px',
+                        boxShadow: '10px 10px 5px -8px rgba(0,0,0,0.38)',
+                        padding: '15px',
+                        borderRadius: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
                 >
                     <div className="mt-4">
                         <h1 className="text-lg text-gray-700 font-semibold hover:underline cursor-pointer">Product Review</h1>
@@ -183,7 +201,7 @@ function ProductDetails() {
                         </div>
 
                         {/* Comment text */}
-                        <p className="mt-4 text-md text-gray-600">
+                        <p>
                             {text}
                         </p>
                     </div>
@@ -192,10 +210,15 @@ function ProductDetails() {
         });
 
         return (
-            <div className="min-h-screen bg-gray-10 flex flex-col gap-10">
-                <div className="px-10">
-                    {reviewsElement}
-                </div>
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: '30px'
+                }}
+            >
+                {reviewsElement}
             </div>
         );
     }
@@ -279,10 +302,26 @@ function ProductDetails() {
 
                             <div className="flex py-4 space-x-4">
                                 <div className="relative">
-                                    <div className="text-center left-0 pt-2 right-0 absolute block text-xs uppercase text-gray-400 tracking-wide font-semibold">Qtd.</div>
-                                    <div className=" appearance-none rounded-xl border border-gray-200 pl-4 pr-8 h-14 flex items-end pb-1">
-                                        7
-                                    </div>
+                                    <div className="text-center left-0 pt-2 right-0 absolute block text-xs uppercase text-gray-400 tracking-wide font-semibold">QTD.</div>
+                                    <select
+                                        className="cursor-pointer appearance-none rounded-xl border border-gray-200 pl-4 pr-8 h-14 flex items-end pb-1"
+                                        onChange={handleOnChangeProductAmount}
+                                    >
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                        <option>7</option>
+                                        <option>8</option>
+                                        <option>9</option>
+                                        <option>10</option>
+                                    </select>
+
+                                    <svg className="w-5 h-5 text-gray-400 absolute right-0 bottom-0 mb-2 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                    </svg>
                                 </div>
 
                                 <button
