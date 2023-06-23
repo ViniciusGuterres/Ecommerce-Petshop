@@ -17,6 +17,10 @@ function Login() {
     const [alertModal, setAlertModal] = useState(null);
 
     // Functions
+    /**
+    * @function views/handleClickToLogin - Will fetch the login api
+    * @param {Object} - The click evt object
+    */
     const handleClickToLogin = evt => {
         evt.preventDefault();
 

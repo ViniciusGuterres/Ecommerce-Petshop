@@ -48,6 +48,10 @@ function CustomersCrud() {
 
 
     // Functions
+    /**
+     * @function CustomersCrud/checkIfAllFieldsAreFilled - Will check if all fields has values
+     * @return {Boolean} - Boolean that indicates it all fields are filled or not
+     */
     const checkIfAllFieldsAreFilled = () => {
         const personalDataValues = Object.values(customerPersonalDataObj);
         const loginDataValues = Object.values(customerLoginDataObj);
@@ -63,7 +67,7 @@ function CustomersCrud() {
     }
 
     /**
-     * @function handleChangeCustomerPersonalDataInput - Will get the input new value and setting the new value at state current obj key
+     * @function CustomersCrud/handleChangeCustomerPersonalDataInput - Will get the input new value and setting the new value at state current obj key
      * @param {string} newValue - The personal data input new value
      * @param string} inputKey - The change personal data input key e.g (state, name, lastName...)
      */
@@ -83,7 +87,7 @@ function CustomersCrud() {
     }
 
     /**
-     * @function handleChangeCustomerLoginDataInput - Will get the input new value and setting the new value at state current obj key
+     * @function CustomersCrud/handleChangeCustomerLoginDataInput - Will get the input new value and setting the new value at state current obj key
      * @param {string} newValue - The login data input new value
      * @param {string} inputKey - The change login data input key e.g (email, password)
      */
@@ -95,7 +99,7 @@ function CustomersCrud() {
     }
 
     /**
-     * @function handleChangeCustomerCreditCardDataInput - Will get the input new value and setting the new value at state current obj key
+     * @function CustomersCrud/handleChangeCustomerCreditCardDataInput - Will get the input new value and setting the new value at state current obj key
      * @param {string} newValue - The credit card data input new value
      * @param {string} inputKey - The change credit card data input key e.g (email, password)
      */
@@ -107,7 +111,7 @@ function CustomersCrud() {
     }
 
     /**
-     * @function buildCurrentTabForm - Will render the selected tab PersonalDataForm, LoginDataForm or CreditCardData form 
+     * @function CustomersCrud/buildCurrentTabForm - Will render the selected tab PersonalDataForm, LoginDataForm or CreditCardData form 
      * @returns {Element} - Wil return a react element
      */
     const buildCurrentTabForm = () => {
@@ -154,13 +158,16 @@ function CustomersCrud() {
     }
 
     /**
-     * @function getTabButtonClass - Will return selected css class if the current tab is selected, otherwise will return default css style class
+     * @function CustomersCrud/getTabButtonClass - Will return selected css class if the current tab is selected, otherwise will return default css style class
      * @returns {string} - Will return class string
      */
     const getTabButtonClass = (tabName) => {
         return tabName === currentTab ? selectedTabClass : defaultTabClass;
     }
 
+    /**
+     * @function CustomersCrud/handleClickSaveCustomer - Will check if all fields are valid and fetch save customer api
+     */
     const handleClickSaveCustomer = () => {
         if (!checkIfAllFieldsAreFilled()) {
             alert('Por favor, preencha todos os campos! ');

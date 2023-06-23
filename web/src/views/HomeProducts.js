@@ -32,7 +32,11 @@ function HomeProducts() {
             .catch(err => console.log('Error::: ', err.message));
     }, []);
 
-    // handle functions
+    // Functions
+    /**
+    * @function views/HomeProducts/handleGettingProductsList - Will set the products and categories states with response api param
+    * @param {Object} response - The get api response
+    */
     const handleGettingProductsList = response => {
         setTimeout(async () => {
             const { data, error } = await response.json();
@@ -53,6 +57,10 @@ function HomeProducts() {
         }, 100);
     };
 
+    /**
+    * @function views/HomeProducts/handleChangeInputFilter - Will set the input products filter value
+    * @param {Object} - The onChange obj event
+    */
     const handleChangeInputFilter = event => {
         const newInputValue = event.target.value;
 
@@ -60,6 +68,10 @@ function HomeProducts() {
         setShowingProductsSeparateByCategory(handleFilteredProductsChange(newInputValue));
     }
 
+    /**
+    * @function views/HomeProducts/handleChangeInputFilter - Will check for each product name and compare with the filtered value and set the matchs products 
+    * @param {string} - The new changed filter value
+    */
     const handleFilteredProductsChange = filteredValue => {
         const removeAccentsRegex = /[\u0300-\u036f]/g;
 
@@ -94,6 +106,10 @@ function HomeProducts() {
     }
 
     // Build functions
+    /**
+    * @function views/HomeProducts/buildProductsList - Will build the products list separated by category
+    * @return {Element} - React element
+    */
     const buildProductsList = () => {
         const result = [];
 
@@ -116,6 +132,10 @@ function HomeProducts() {
         return result;
     }
 
+    /**
+    * @function views/HomeProducts/buildModalFilter - Will build the sort products modal filter
+    * @return {Element} - React element
+    */
     const buildModalFilter = () => {
         const sortOptionsDefaultClass = 'font-medium text-gray-900 block px-4 py-2 text-sm cursor-pointer';
         const sortOptionsSelectedClass = 'text-gray-900 block px-4 py-2 text-sm text-primary-700';
@@ -181,6 +201,10 @@ function HomeProducts() {
         );
     }
 
+    /**
+    * @function views/HomeProducts/buildFilters - Will render the input filter and sort modal filter
+    * @return {Element} - React element
+    */
     const buildFilters = () => {
         return (
             <div className="bg-white shadow-sm sticky top-0">

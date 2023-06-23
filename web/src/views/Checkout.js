@@ -15,6 +15,9 @@ function Checkout() {
         getCustomerDocument();
     }, []);
 
+    /**
+    * @function views/getCustomerDocument - Will fetch getCustomers to core api
+    */
     const getCustomerDocument = () => {
         // Getting customer code
         const customerCode = localStorage.getItem('customer');
@@ -46,6 +49,9 @@ function Checkout() {
             });
     }
 
+    /**
+    * @function views/getProductsListDocuments - Will fetch getProducts to core api
+    */
     const getProductsListDocuments = () => {
         // Getting products
         const cartProducts = localStorage.getItem('customerCart');
@@ -83,6 +89,10 @@ function Checkout() {
             });
     }
 
+    /**
+    * @function views/buildProductsCartList - Will build the cart's products list
+    * @returns {Element} - Return react element
+    */
     const buildProductsCartList = () => {
         const productsList = productsInformation?.map(productDoc => {
             const customerCartProductsRow = customerCartProducts[productDoc.code];
@@ -125,6 +135,10 @@ function Checkout() {
         );
     }
 
+    /**
+    * @function views/calcOrderTotal - Will calc the total price based on each product price times quantity
+    * @returns {Number} - The order total price
+    */
     const calcOrderTotal = () => {
         let total = 0;
 
@@ -141,6 +155,9 @@ function Checkout() {
         return priceFormatted;
     }
 
+    /**
+    * @function views/buildProductsCartList - Will fetch saveOrder to core api 
+    */
     const handleClickToFinishOrder = () => {
         // Getting products
         const cartProducts = localStorage.getItem('customerCart');

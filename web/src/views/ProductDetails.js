@@ -35,8 +35,8 @@ function ProductDetails() {
     }, []);
 
     /**
-     * 
-     * @param {object} response - The get request response object 
+     *  @function views/ProductDetails/handleGettingProduct - Will receive the get response and set into state
+     * @param {Object} response - The fetch get api response
      */
     const handleGettingProduct = async response => {
         const { data, error } = await response.json();
@@ -52,6 +52,9 @@ function ProductDetails() {
         }
     }
 
+    /**
+     *  @function views/ProductDetails/handleClickAddToCart - Will add the product to local storage if the customer is logged, otherwise, send him to login screen
+     */
     const handleClickAddToCart = () => {
         const localStorageCustomerToken = localStorage.getItem("customerToken");
         const localStorageCustomerCart = localStorage.getItem("customerCart");
@@ -87,6 +90,10 @@ function ProductDetails() {
         window.location.href = '/';
     }
 
+    /**
+     *  @function views/ProductDetails/handleOnChangeProductAmount - Will set the new quantity products amount
+     * @param {Object} evt - The on change event object
+     */
     const handleOnChangeProductAmount = evt => {
         const value = evt.target.value;
 
@@ -167,7 +174,7 @@ function ProductDetails() {
     };
 
     /**
-     * 
+     *  @function views/ProductDetails/buildCommentsSectionElement - Will build the product's comments section
      * @returns {Element} - Will return the comments section element
      */
     const buildCommentsSectionElement = () => {
