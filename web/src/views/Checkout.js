@@ -102,6 +102,10 @@ function Checkout() {
             const priceFormattedToDecimals = productDoc?.price.toFixed(2)?.toString() || '';
             const priceFormatted = productDoc?.price ? `R$: ${priceFormattedToDecimals?.replace('.', ',')}` : '';
 
+            const totalPrice = productDoc.price * customerCartProductsRow.amount;
+            const totalPriceFormattedToDecimals = totalPrice?.toFixed(2)?.toString() || '';
+            const totalPriceFormatted = totalPriceFormattedToDecimals ? `R$: ${totalPriceFormattedToDecimals?.replace('.', ',')}` : '';
+ 
             return (
                 <li
                     className="grid grid-cols-6 gap-2 border-b-1"
@@ -122,7 +126,7 @@ function Checkout() {
                             </span>
 
                             <span className="text-pink-400 font-semibold inline-block">
-                                {priceFormatted}
+                                {totalPriceFormatted}
                             </span>
                         </div>
                     </div>
@@ -267,7 +271,7 @@ function Checkout() {
                                 </label>
 
                                 <label className="xl:w-1/4 xl:inline-flex py-3 items-center flex xl:border-none border-t border-gray-200 py-3">
-                                    <span className="text-right px-2 xl:px-0 xl:text-none">CEP: </span>
+                                    <span className="text-right px-2 xl:px-0 xl:text-none">CEP:  </span>
                                     <span>{customerInformation.zipCode}</span>
                                 </label>
                             </fieldset>
