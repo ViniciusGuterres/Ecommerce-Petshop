@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import jwt from 'jwt-decode'
+
 import settings from "../settings.js";
 
 // Globals const
@@ -163,49 +165,58 @@ function Checkout() {
         const cartProducts = localStorage.getItem('customerCart');
         const cartProductsParse = JSON.parse(cartProducts);
         const productsValues = Object.values(cartProductsParse);
-
         const customerCode = localStorage.getItem('customer');
+        const customerToken = localStorage.getItem('customerToken');
 
-        // Building order body obj
-        const orderBodyObj = {
-            products: productsValues,
-            customerId: +customerCode
-        };
+        if (customerToken) {
+            try {
+                // Building order body obj
+                const orderBodyObj = {
+                    products: productsValues,
+                    customerId: +customerCode
+                };
 
-        // Calling get products controller
-        const getOptions = {
-            method: 'POST',
-            body: JSON.stringify(orderBodyObj),
-            headers: {
-                'Content-Type': 'application/json',
+                // Calling get products controller
+                const getOptions = {
+                    method: 'POST',
+                    body: JSON.stringify(orderBodyObj),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': JSON.stringify(customerToken)
+                    },
+                };
 
-            },
-        };
+                fetch(`${BACKEND_SERVER_URL}/saveOrder`, getOptions)
+                    .then(async response => {
+                        const { data, error } = await response.json();
 
-        fetch(`${BACKEND_SERVER_URL}/saveOrder`, getOptions)
-            .then(async response => {
-                const { data, error } = await response.json();
+                        if (error) {
+                            alert('Um erro inesperado ocorreu! ');
+                            return;
+                        }
 
-                if (error) {
-                    alert('Um erro inesperado ocorreu! ');
-                    return;
-                }
+                        if (data) {
+                            alert('Pedido criado com sucesso! ');
 
-                if (data) {
-                    alert('Pedido criado com sucesso! ');
+                            // Clean customer cart local storage
+                            localStorage.removeItem('customerCart');
 
-                    // Clean customer cart local storage
-                    localStorage.removeItem('customerCart');
-
-                    setTimeout(() => {
-                        window.location.href = '/';
-                    }, 1000);
-                }
-            })
-            .catch(err => {
-                alert('Um erro inesperado ocorreu! ');
-                console.log('Error::: ', err.message)
-            });
+                            setTimeout(() => {
+                                window.location.href = '/';
+                            }, 1000);
+                        }
+                    })
+                    .catch(err => {
+                        alert('Um erro inesperado ocorreu! ');
+                        console.log('Error::: ', err.message)
+                    });
+            } catch (error) {
+                console.log(error)
+            }
+        } else {
+            alert('Usuario não autenticado! Por favor fazer o login!')
+            window.location.href = ("/login");
+        }
     }
 
     return (
