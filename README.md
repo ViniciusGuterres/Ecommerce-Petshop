@@ -11,3 +11,5 @@ Used libraries:
 		* express v4.18.1;
 		* cors v2.8.5;
 		* bcryptjs v2.4.3;
+
+  To teste the API endPoints use: core/postmanEndPoints.json
